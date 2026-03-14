@@ -19,7 +19,7 @@
     ],
     "docs": "https://solo.ghost.io/about/",
     "config": {
-        "posts_per_page": 6,
+        "posts_per_page": 10,
         "image_sizes": {
             "xs": {
                 "width": 150
@@ -42,9 +42,13 @@
         },
         "card_assets": true,
         "custom": {
-            "background_color": {
+            "default_background_color": {
                 "type": "color",
                 "default": "#fefefa"
+            },
+            "dark_mode_background_color": {
+                "type": "color",
+                "default": "#000000"
             },
             "navigation_layout": {
                 "type": "select",
@@ -55,6 +59,10 @@
                 "type": "boolean",
                 "default": false
             },
+            "show_table_of_contents_in_pages": {
+                "type": "boolean",
+                "default": true
+            },
             "typography": {
                 "type": "select",
                 "options": ["Modern sans-serif", "Elegant serif", "Consistent mono"],
@@ -63,11 +71,7 @@
             "footer_text": {
                 "type": "text"
             },
-            
-            "show_table_of_contents_in_pages": {
-                "type": "boolean",
-                "default": true
-            },
+
             "show_table_of_contents_in_posts": {
                 "type": "boolean",
                 "default": false,

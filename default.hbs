@@ -33,7 +33,8 @@
 
     <style>
         :root {
-            --background-color: {{@custom.background_color}}
+            --background-color: {{@custom.default_background_color}};
+            --dark-mode-background-color: {{@custom.dark_mode_background_color}};
         }
 
         .gh-content {
@@ -67,7 +68,7 @@
 
         // To prevent theme flashing on load, apply all colors before page load
         if (localStorage.getItem('darkMode') === 'true') {
-            document.documentElement.style.setProperty('--background-color', 'black');
+            document.documentElement.style.setProperty('--background-color', 'var(--dark-mode-background-color)');
         }
 
         setTextColorBasedOnBackground(); // Initial run to set text color based on initial background color
@@ -115,7 +116,7 @@
                 return;
             } else if (mode === 'dark') {
                 showSunToggleIcon(true); // display sun icon, hide moon icon
-                document.documentElement.style.setProperty('--background-color', 'black'); // Set dark background
+                document.documentElement.style.setProperty('--background-color', 'var(--dark-mode-background-color)'); // Set dark background
                 localStorage.setItem('darkMode', true);
                 setTextColorBasedOnBackground();
                 setAccentColorBasedOnTextColor();
@@ -142,16 +143,16 @@
             const prefers_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const previous_dark_state = localStorage.getItem('darkMode');
 
-            // set based on system preference if no previous preference is stored
-            if (previous_dark_state === null) {
+            if (previous_dark_state === null)
+                localStorage.setItem('autoDarkMode', true);
+
+            // set based on system preference if there is no manual preference, otherwise set based on manual preference
+            if (localStorage.getItem('autoDarkMode') === 'true') {
                 if (prefers_dark) {
                     changeColorTheme('dark');
                 } else {
                     changeColorTheme('light');
                 }
-
-                // enable auto dark mode based on system preference
-                localStorage.setItem('autoDarkMode', true);
             }
             else if (previous_dark_state === 'true') { // restore dark mode if it was previously enabled
                 showSunToggleIcon(true);
@@ -322,9 +323,7 @@
         collapseDepth: 6,
         orderedList: false,
     });
-</script>
 
-<script>    
     // Initial run to load dark mode preference
     const originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
 
