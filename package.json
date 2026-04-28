@@ -73,6 +73,11 @@
                 "type": "text"
             },
 
+            "show_share_button": {
+                "type": "boolean",
+                "default": true,
+                "group": "post"
+            },
             "show_table_of_contents_in_posts": {
                 "type": "boolean",
                 "default": false,

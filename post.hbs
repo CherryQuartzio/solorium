@@ -74,7 +74,9 @@
                         </div>
 
                         <div class="gh-navigation-middle">
-                            <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{> "icons/share"}}</a>
+                            {{#if @custom.show_share_button}}
+                                <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{> "icons/share"}}</a>
+                            {{/if}}
                         </div>
 
                         <div class="gh-navigation-next">
