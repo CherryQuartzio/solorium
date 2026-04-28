@@ -69,15 +69,17 @@
                     <nav class="gh-navigation">
                         <div class="gh-navigation-previous">
                             {{#prev_post}}
-                                <a class="gh-navigation-link" aria-label="Go to the previous post" href="{{url}}">❮ Previous</a>
+                                <a class="gh-navigation-link" aria-label="Go to the previous post" title="Previous post"href="{{url}}"><span class="navigation-icon">{{> "icons/arrow-left"}}</span> <span class="gh-navigation-text">{{t "Prev"}}</span></a>
                             {{/prev_post}}
                         </div>
 
-                        <div class="gh-navigation-middle"></div>
+                        <div class="gh-navigation-middle">
+                            <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{> "icons/share"}}</a>
+                        </div>
 
                         <div class="gh-navigation-next">
                             {{#next_post}}
-                                <a class="gh-navigation-link" aria-label="Go to the next post" href="{{url}}">Next ❯</a>
+                                <a class="gh-navigation-link" aria-label="Go to the next post" title="Next post" href="{{url}}"><span class="gh-navigation-text">{{t "Next"}}</span> <span class="navigation-icon">{{> "icons/arrow-right"}}</span></a>
                             {{/next_post}}
                         </div>
                     </nav>

@@ -1,7 +1,7 @@
 {
     "name": "solorium",
     "description": "A custom Ghost theme focused on personal blogging and imagery, with a clean and modern design.",
-    "version": "1.0.6",
+    "version": "1.0.10",
     "engines": {
         "ghost": ">=6.0.0"
     },
@@ -19,7 +19,7 @@
     ],
     "docs": "https://solo.ghost.io/about/",
     "config": {
-        "posts_per_page": 10,
+        "posts_per_page": 8,
         "image_sizes": {
             "xs": {
                 "width": 150
@@ -50,18 +50,19 @@
                 "type": "color",
                 "default": "#000000"
             },
+            "show_table_of_contents_in_pages": {
+                "type": "boolean",
+                "default": true
+            },
             "navigation_layout": {
                 "type": "select",
                 "options": ["Logo on the left", "Logo in the middle", "Stacked"],
                 "default": "Logo in the middle"
             },
             "show_account_on_header": {
-                "type": "boolean",
-                "default": false
-            },
-            "show_table_of_contents_in_pages": {
-                "type": "boolean",
-                "default": true
+                "type": "select",
+                "options": ["Always", "Only when logged in", "Never"],
+                "default": "Always"
             },
             "typography": {
                 "type": "select",
@@ -113,11 +114,12 @@
         "zip": "gulp zip"
     },
     "devDependencies": {
-        "@tryghost/shared-theme-assets": "2.5.2",
-        "autoprefixer": "10.4.23",
+        "@tryghost/shared-theme-assets": "2.6.1",
+        "@tryghost/theme-translations": "^0.0.9",
+        "autoprefixer": "10.5.0",
         "beeper": "2.1.0",
-        "cssnano": "7.1.2",
-        "gscan": "5.2.2",
+        "cssnano": "7.1.7",
+        "gscan": "5.4.3",
         "gulp": "5.0.1",
         "gulp-concat": "2.6.1",
         "gulp-livereload": "4.0.2",
@@ -125,8 +127,9 @@
         "gulp-uglify": "3.0.2",
         "gulp-zip": "5.1.0",
         "ordered-read-streams": "2.0.0",
-        "postcss": "8.5.6",
+        "postcss": "8.5.12",
         "postcss-easy-import": "4.0.0",
-        "pump": "3.0.3"
+        "pump": "3.0.4"
     }
 }
+

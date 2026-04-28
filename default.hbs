@@ -189,22 +189,10 @@
                 </div>
                 <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle theme" onclick="changeColorTheme()">
                     <div class="icon-moon">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
+                        {{> "icons/moon"}}
                     </div>
                     <div class="icon-sun">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
+                        {{> "icons/sun"}}
                     </div>
                 </button>
                 <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
@@ -220,22 +208,10 @@
                         <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
                         <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle site theme" onclick="changeColorTheme()">
                             <div class="icon-moon">
-                                <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                                </svg>
+                                {{> "icons/moon"}}
                             </div>
                             <div class="icon-sun">
-                                <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="5"></circle>
-                                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                                </svg>
+                                {{> "icons/sun"}}
                             </div>
                         </button>
                     {{/match}}
@@ -245,26 +221,20 @@
             <div class="gh-head-actions">
                 <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle theme" onclick="changeColorTheme()">
                     <div class="icon-moon">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
+                        {{> "icons/moon"}}
                     </div>
                     <div class="icon-sun">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="white" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
+                        {{> "icons/sun"}}
                     </div>
                 </button>
                 <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
-                {{#if @custom.show_account_on_header}}
+                {{#match @custom.show_account_on_header "Only when logged in"}}
+                    {{#if @member}}
+                        <div class="gh-head-members">
+                            <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/account" data-portal="account">Account</a>
+                        </div>
+                    {{/if}}
+                {{else match @custom.show_account_on_header "Always"}}
                     <div class="gh-head-members">
                         {{#unless @member}}
                             {{#unless @site.members_invite_only}}
@@ -277,12 +247,72 @@
                             <a class="gh-head-btn gh-btn gh-primary-btn" href="#/portal/account" data-portal="account">Account</a>
                         {{/unless}}
                     </div>
-                {{/if}}
+                {{/match}}
             </div>
         </div>
     </header>
 
     {{{body}}}
+
+    {{! Initialize Tocbot after you load the script }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.min.js"></script>
+    <script>
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.gh-toc',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.gh-content',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3, h4',
+            // Ensure correct positioning
+            hasInnerContainers: true,
+            collapseDepth: 6,
+            orderedList: false,
+        });
+
+        // Initial run to load dark mode preference
+        const originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
+
+        // determine the shade of the current accent color for contrast adjustment in theme switching
+        let accentColor = originalAccentColor.trim().slice(1);
+        r = parseInt(accentColor.substr(0, 2), 16);
+        g = parseInt(accentColor.substr(2, 2), 16);
+        b = parseInt(accentColor.substr(4, 2), 16);
+        yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        const originalAccentColorShade = (yiq >= 128) ? 'bright' : 'dim';
+        
+        initColorTheme();
+
+        // remove table of contents if there are no headings in the content or if the page is restricted and the user doesn't have access
+        if (document.querySelector('.gh-sidebar') && (document.querySelectorAll('.gh-toc .toc-link').length === 0 || document.querySelector('.gh-cta'))) {
+            document.querySelector('.gh-sidebar').style.display = 'none';
+        }
+
+        // Event listener: Right click the theme toggle button to reset to system preference
+        document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(button => {
+            button.addEventListener('contextmenu', e => {
+                e.preventDefault();
+                localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
+                initColorTheme(); // re-initialize theme based on system preference
+            });
+        });
+
+        // Event listener: Automatically change theme if system preference changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (localStorage.getItem('autoDarkMode') === 'true') {
+                const newColorScheme = e.matches ? 'dark' : 'light';
+                changeColorTheme(newColorScheme);
+            }
+        });
+
+        // Event listener: Keyboard shortcut (Ctrl + K) to open search
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                document.querySelector('[data-ghost-search]').click();
+            }
+        });
+    </script>
 
     <footer class="gh-foot gh-outer">
         <div class="gh-foot-inner gh-inner">
@@ -307,66 +337,6 @@
 {{/is}}
 
 <script src="{{asset "built/main.min.js"}}"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.min.js"></script>
-{{! Initialize Tocbot after you load the script }}
-<script>
-    tocbot.init({
-        // Where to render the table of contents.
-        tocSelector: '.gh-toc',
-        // Where to grab the headings to build the table of contents.
-        contentSelector: '.gh-content',
-        // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h1, h2, h3, h4',
-        // Ensure correct positioning
-        hasInnerContainers: true,
-        collapseDepth: 6,
-        orderedList: false,
-    });
-
-    // Initial run to load dark mode preference
-    const originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
-
-    // determine the shade of the current accent color for contrast adjustment in theme switching
-    let accentColor = originalAccentColor.trim().slice(1);
-    r = parseInt(accentColor.substr(0, 2), 16);
-    g = parseInt(accentColor.substr(2, 2), 16);
-    b = parseInt(accentColor.substr(4, 2), 16);
-    yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    const originalAccentColorShade = (yiq >= 128) ? 'bright' : 'dim';
-    
-    initColorTheme();
-
-    // remove table of contents if there are no headings in the content or if the page is restricted and the user doesn't have access
-    if (document.querySelector('.gh-sidebar') && (document.querySelectorAll('.gh-toc .toc-link').length === 0 || document.querySelector('.gh-cta'))) {
-        document.querySelector('.gh-sidebar').style.display = 'none';
-    }
-
-    // Event listener: Right click the theme toggle button to reset to system preference
-    document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(button => {
-        button.addEventListener('contextmenu', e => {
-            e.preventDefault();
-            localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
-            initColorTheme(); // re-initialize theme based on system preference
-        });
-    });
-
-    // Event listener: Automatically change theme if system preference changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        if (localStorage.getItem('autoDarkMode') === 'true') {
-            const newColorScheme = e.matches ? 'dark' : 'light';
-            changeColorTheme(newColorScheme);
-        }
-    });
-
-    // Event listener: Keyboard shortcut (Ctrl + K) to open search
-    document.addEventListener('keydown', e => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-            e.preventDefault();
-            document.querySelector('[data-ghost-search]').click();
-        }
-    });
-</script>
 
 {{ghost_foot}}
 
