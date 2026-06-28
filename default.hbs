@@ -13,19 +13,21 @@
 
     <title>{{meta_title}}</title>
 
+    {{!-- Preload critical resources to reduce render-blocking --}}
+    <link rel="preload" as="style" href="{{asset "built/screen.css"}}" />
+    <link rel="preload" as="script" href="{{asset "built/main.min.js"}}" />
     {{#is "home"}}
         {{#if @site.cover_image}}
-        {{#match @custom.header_section_layout "Large background"}}
-            <link rel="preload" as="image" href="{{@site.cover_image}}">
-        {{else match @custom.header_section_layout "Side by side"}}
-            <link rel="preload" as="image" href="{{img_url @site.cover_image size="m"}}">
-        {{/match}}
-
+            {{#match @custom.header_section_layout "Large background"}}
+                <link rel="preload" as="image" href="{{@site.cover_image}}">
+            {{else match @custom.header_section_layout "Side by side"}}
+                <link rel="preload" as="image" href="{{img_url @site.cover_image size="m"}}">
+            {{/match}}
         {{/if}}
     {{/is}}
-    
+     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.css">
-    <link rel="stylesheet" href="{{asset "built/screen.css"}}">
+    <link rel="stylesheet" type="text/css" href="{{asset "built/screen.css"}}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

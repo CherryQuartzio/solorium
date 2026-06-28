@@ -62,9 +62,12 @@ hr {
     grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-.gh-canvas > *,
-.page-template .no-image :is(.gh-article-title, .gh-article-excerpt) {
+.gh-canvas > * {
     grid-column: 4 / span 6;
+}
+
+.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+    grid-column: 1 / span 12;
 }
 
 .gh-canvas > .kg-width-wide {
@@ -84,13 +87,8 @@ hr {
     margin-bottom: var(--header-spacing, 80px);
 }
 
-.kg-cta-sponsor-label span:not(a span) {
-    color: color-mix(in srgb,currentColor 70%,transparent);
-}
-
 @media (max-width: 991px) {
-    .gh-canvas > *,
-   .page-template .no-image :is(.gh-article-title, .gh-article-excerpt) {
+    .gh-canvas > * {
         grid-column: 3 / span 8;
     }
 
@@ -100,8 +98,7 @@ hr {
 }
 
 @media (max-width: 767px) {
-    .gh-canvas > *,
-   .page-template .no-image :is(.gh-article-title, .gh-article-excerpt) {
+    .gh-canvas > * {
         grid-column: 2 / span 10;
     }
 
@@ -111,8 +108,7 @@ hr {
 }
 
 @media (max-width: 480px) {
-    .gh-canvas > *,
-   .page-template .no-image :is(.gh-article-title, .gh-article-excerpt) {
+    .gh-canvas > * {
         grid-column: 1 / span 12;
     }
 }
@@ -886,6 +882,10 @@ hr {
     letter-spacing: -0.005em;
 }
 
+.gh-content .kg-cta-sponsor-label span:not(a span) {
+    color: var(--color-primary-text);
+}
+
 /* Navigation
 /* ---------------------------------------------------------- */
 
@@ -1130,17 +1130,17 @@ a.toc-link {
 /* ---------------------------------------------------------- */
 .gh-button-share {
     letter-spacing: 0;
-    border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: 999px;
-    padding: 8px 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    padding: 6px 16px;
     display: inline-flex;
     align-items: center;
     gap: 8px;       
 }
 
 .gh-button-share svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     stroke: "white";
 }
 
@@ -1154,9 +1154,10 @@ a.toc-link {
         display: none;
     }
 
-    .gh-button-share {
-        font-size: 1.7rem;
-    }
+}
+
+.gh-button-share {
+    font-size: 1.7rem;
 }
 
 .navigation-icon {
