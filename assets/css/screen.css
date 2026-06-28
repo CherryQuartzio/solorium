@@ -20,7 +20,8 @@
 }
 
 :root.has-light-text {
-    --color-lighter-gray: var(--color-utility-gray); /*rgba(0, 0, 0, 0.1)*/
+    --color-lighter-gray: var(--color-utility-gray);
+    /*rgba(0, 0, 0, 0.1)*/
     --color-darker-gray: #fff;
     --color-secondary-text: var(--color-secondary-text-light);
     --color-border: rgba(255, 255, 255, 0.2);
@@ -62,20 +63,28 @@ hr {
     grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-.gh-canvas > * {
+.gh-canvas>* {
     grid-column: 4 / span 6;
 }
 
-.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
-    grid-column: 1 / span 12;
+/* Page template: When TOC active on DESKTOP, expand title+excerpt to fill the TOC-adjacent space */
+@media (min-width: 992px) {
+    body.page-template:not(.no-toc) .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+        grid-column: 1 / span 12;
+    }
 }
 
-.gh-canvas > .kg-width-wide {
+/* Page template: When no TOC, explicitly center title+excerpt in the 12-col header grid */
+body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+    grid-column: 4 / span 6;
+}
+
+.gh-canvas>.kg-width-wide {
     grid-column: 4 / span 9;
 }
 
-.gh-canvas > .kg-width-full,
-.gh-canvas > .kg-gallery-card.kg-width-wide {
+.gh-canvas>.kg-width-full,
+.gh-canvas>.kg-gallery-card.kg-width-wide {
     position: relative;
     z-index: 20;
     grid-column: 1 / span 12;
@@ -88,27 +97,27 @@ hr {
 }
 
 @media (max-width: 991px) {
-    .gh-canvas > * {
+    .gh-canvas>* {
         grid-column: 3 / span 8;
     }
 
-    .gh-canvas > .kg-width-wide {
+    .gh-canvas>.kg-width-wide {
         grid-column: 3 / span 10;
     }
 }
 
 @media (max-width: 767px) {
-    .gh-canvas > * {
+    .gh-canvas>* {
         grid-column: 2 / span 10;
     }
 
-    .gh-canvas > .kg-width-wide {
+    .gh-canvas>.kg-width-wide {
         grid-column: 1 / span 12;
     }
 }
 
 @media (max-width: 480px) {
-    .gh-canvas > * {
+    .gh-canvas>* {
         grid-column: 1 / span 12;
     }
 }
@@ -166,6 +175,15 @@ hr {
     }
 }
 
+/* Show navigation items immediately instead of keeping them hidden (opacity: 0) until
+   dropdown.js adds .is-dropdown-loaded after the logo image loads, which caused the menu
+   to flash in after the page was already visible. */
+@media (min-width: 768px) {
+    body:not(.is-dropdown-loaded) .gh-head-menu .nav > li {
+        opacity: 1;
+    }
+}
+
 /* About section
 /* ---------------------------------------------------------- */
 
@@ -211,7 +229,7 @@ hr {
     font-family: var(--gh-font-body, var(--font-mono));
 }
 
-.gh-about-primary + .gh-about-secondary {
+.gh-about-primary+.gh-about-secondary {
     max-width: 640px;
     margin-top: 20px;
     font-size: clamp(2rem, 0.36vw + 1.83rem, 2.4rem);
@@ -330,7 +348,8 @@ hr {
 
 .cover-arrow {
     bottom: var(--gap);
-    display: inline-flex;;
+    display: inline-flex;
+    ;
     height: 0;
     left: 50%;
     margin-left: -20px;
@@ -416,13 +435,13 @@ hr {
     color: var(--color-secondary-text);
 }
 
-.gh-card-meta > * {
+.gh-card-meta>* {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.gh-card-meta > * + *:not(script):not(.gh-card-access)::before {
+.gh-card-meta>*+*:not(script):not(.gh-card-access)::before {
     width: 2px;
     height: 2px;
     content: "";
@@ -453,12 +472,12 @@ hr {
     max-width: 1200px;
 }
 
-.has-classic-feed .gh-card + .gh-card {
+.has-classic-feed .gh-card+.gh-card {
     margin-top: clamp(4.8rem, 4rem + 2.5vw, 8rem);
 }
 
-.has-classic-feed .gh-card + .gh-card.no-image,
-.has-classic-feed .gh-card.no-image + .gh-card {
+.has-classic-feed .gh-card+.gh-card.no-image,
+.has-classic-feed .gh-card.no-image+.gh-card {
     margin-top: clamp(8rem, 7.14vw + 4.57rem, 16rem);
 }
 
@@ -576,7 +595,7 @@ hr {
     min-height: 800px;
 }
 
-.has-parallax-feed .gh-card + .gh-card {
+.has-parallax-feed .gh-card+.gh-card {
     margin-top: 80px;
 }
 
@@ -641,58 +660,94 @@ hr {
 /* Article
 /* ---------------------------------------------------------- */
 
-.gh-article-meta {
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-    grid-row-start: 1;
-    width: 100%;
-    margin: 0 !important;
+.gh-article-tags {
+    grid-column: 1 / span 9;
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.gh-article-meta-inner {
-    position: sticky;
-    top: 48px;
+.gh-article-meta {
+    grid-column: 1 / span 12;
+    margin-top: 24px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.gh-article-meta .gh-card-meta {
+    margin-top: 4px;
+}
+
+.gh-article-meta .gh-button-share {
+    margin-left: auto;
 }
 
 .gh-article-meta .gh-author-image-list {
     display: flex;
-    margin-bottom: 12px;
-    margin-left: -2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gh-article-meta .gh-author-image-item {
+    position: relative;
+    margin-left: -12px;
+    z-index: 1;
+}
+
+.gh-article-meta .gh-author-image-item:first-child {
+    margin-left: 0;
+    z-index: 10;
+}
+
+.gh-article-meta .gh-author-image-item:nth-child(2) {
+    z-index: 9;
+}
+
+.gh-article-meta .gh-author-image-item:nth-child(3) {
+    z-index: 8;
+}
+
+.gh-article-meta .gh-author-image-item:nth-child(4) {
+    z-index: 7;
+}
+
+.gh-article-meta .gh-author-image-item:nth-child(5) {
+    z-index: 6;
 }
 
 .gh-article-meta .gh-author-image {
     display: block;
-    width: 72px;
-    height: 72px;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    overflow: hidden;
     margin-bottom: 0;
-    border: 0px solid var(--color-white);
+}
+
+.gh-article-meta .gh-author-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .gh-article-meta .gh-author-icon {
+    width: 100%;
+    height: 100%;
     background-color: var(--color-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.gh-article-meta .gh-author-image:hover {
-    opacity: 1;
-}
-
-.gh-article-meta .gh-author-image-list .gh-author-image + .gh-author-image {
-    margin-left: -20px;
-}
-
-.gh-article-meta .gh-author-image-list .gh-author-image:nth-child(1) {
-    z-index: 30;
-}
-
-.gh-article-meta .gh-author-image-list .gh-author-image:nth-child(2) {
-    z-index: 20;
-}
-
-.gh-article-meta .gh-author-image-list .gh-author-image:nth-child(3) {
-    z-index: 10;
+.gh-article-meta .gh-author-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-darker-gray);
 }
 
 .gh-article-meta .gh-author-name-list {
@@ -718,7 +773,6 @@ hr {
     display: inline-block;
     width: fit-content;
     padding: 2px 12px;
-    margin-top: 20px;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--tag-color, var(--color-darker-gray)) !important;
@@ -730,9 +784,16 @@ hr {
 
 .gh-content .gh-article-header {
     grid-row-start: 1;
-    grid-column: 4 / span 9;
+    /* Default: centered (4 / span 6 from .gh-canvas > *) */
     margin-top: 0;
     margin-bottom: clamp(4.8rem, 1.43vw + 4.11rem, 6.4rem);
+}
+
+/* Only push header wider when TOC is visible beside the content (desktop) */
+@media (min-width: 992px) {
+    body:not(.no-toc) .gh-content>.gh-article-header {
+        grid-column: 4 / span 9;
+    }
 }
 
 .gh-article-title {
@@ -788,15 +849,15 @@ hr {
     margin-top: clamp(4rem, 2.14vw + 2.97rem, 6.4rem);
 }
 
-.gh-content > [id] {
+.gh-content>[id] {
     font-weight: 800;
 }
 
-.has-serif-font:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]):not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > :is([id], p, ul, ol) {
+.has-serif-font:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]):not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content> :is([id], p, ul, ol) {
     font-family: var(--gh-font-body, var(--font-serif));
 }
 
-.has-mono-font:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]):not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content > :is([id], p, ul, ol) {
+.has-mono-font:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]):not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content> :is([id], p, ul, ol) {
     font-family: var(--gh-font-body, var(--font-mono));
 }
 
@@ -804,32 +865,15 @@ hr {
     margin-top: clamp(7.8rem, 4rem + 2.5vw, 8rem);
 }
 
-@media (min-width: 992px) {
-    .gh-article-meta {
-        position: absolute;
-        grid-column: 1 / span 3;
-    }
-}
-
 @media (max-width: 991px) {
-    :is(.gh-article-title, .gh-article-excerpt),
-    .gh-content > .gh-article-header {
+
+    :is(.gh-article-title, .gh-article-excerpt) {
         grid-column: 1 / span 10;
     }
 
-    .gh-article-meta {
-        margin-bottom: 32px !important;
-    }
-
-    .no-image .gh-article-meta {
-        grid-row-start: 2;
-    }
-
-    .gh-article-meta .gh-author-image {
-        width: 64px;
-        height: 64px;
-        margin-right: 12px;
-        margin-bottom: 0;
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
+    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+        grid-column: 3 / span 8;
     }
 
     .gh-article-meta-wrapper {
@@ -838,13 +882,29 @@ hr {
 }
 
 @media (max-width: 767px) {
-    :is(.gh-article-title, .gh-article-excerpt),
-    .gh-content > .gh-article-header {
+
+    :is(.gh-article-title, .gh-article-excerpt) {
         grid-column: 1 / span 12;
+    }
+
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
+    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+        grid-column: 2 / span 10;
     }
 
     .gh-content {
         font-size: var(--content-font-size);
+    }
+
+    .gh-share-text {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
+    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+        grid-column: 1 / span 12;
     }
 }
 
@@ -892,7 +952,7 @@ hr {
 .gh-navigation {
     grid-column: 1 / span 12;
     font-size: clamp(2rem, 1.7rem + 0.9375vw, 3.2rem);
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.02em;
 }
 
@@ -1022,7 +1082,7 @@ hr {
 /* Tocbot
 /* ---------------------------------------------------------- */
 
-.gh-toc > .toc-list {
+.gh-toc>.toc-list {
     position: relative;
     padding-left: 0px;
 }
@@ -1033,7 +1093,7 @@ hr {
     padding-left: 1.5rem;
 }
 
-.toc-list-item > .toc-list {
+.toc-list-item>.toc-list {
     padding-left: 1.5rem;
 }
 
@@ -1047,15 +1107,16 @@ a.toc-link {
 }
 
 .gh-toc .is-active-link::before {
-    background-color: var(--ghost-accent-color); /* Defines TOC accent color based on Accent color set in Ghost Admin */
+    background-color: var(--ghost-accent-color);
+    /* Defines TOC accent color based on Accent color set in Ghost Admin */
 }
 
-.is-active-li > .is-active-link {
+.is-active-li>.is-active-link {
     font-weight: normal;
 }
 
-.toc-link::before{
-    background-color:var(--background-color);
+.toc-link::before {
+    background-color: var(--background-color);
     width: 0px;
 }
 
@@ -1066,38 +1127,58 @@ a.toc-link {
     margin-bottom: 16px;
 }
 
-.gh-content * + .gh-sidebar {
+.gh-content *+.gh-sidebar {
     margin-top: calc(var(--header-spacing, 80px) + 3rem);
+}
+
+.gh-toc-divider {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    .gh-toc-divider {
+        display: block;
+        margin-top: calc(var(--header-spacing, 80px) + 3rem);
+        margin-bottom: 3rem;
+    }
+
+    .gh-content *+.gh-sidebar {
+        margin-top: 0;
+    }
 }
 
 @media (min-width: 992px) {
     .gh-sidebar {
-        position: absolute; 
+        position: absolute;
         top: 0;
         bottom: 0;
-        grid-column: 1/ span 3; /* Place the TOC to the left of the content */
-        max-width: calc(100% - 6px); /* Account for border width */
+        grid-column: 1/ span 3;
+        /* Place the TOC to the left of the content */
+        max-width: calc(100% - 6px);
+        /* Account for border width */
     }
-    
+
     .gh-toc {
-        position: sticky; /* On larger screens, TOC will stay in the same spot on the page */
-        top: 2em; /* Height of the header + some spacing */
+        position: sticky;
+        /* On larger screens, TOC will stay in the same spot on the page */
+        top: 2em;
+        /* Height of the header + some spacing */
         max-width: 100%;
     }
 
-    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]) {
+    .gh-content :is(.kg-card, table)+ :not(.kg-card):not(table):not([id]) {
         margin-top: 0;
     }
 
-    .gh-content :is(.kg-card, table) + :not(.kg-card):not(table):not([id]):not(.gh-sidebar) {
+    .gh-content :is(.kg-card, table)+ :not(.kg-card):not(table):not([id]):not(.gh-sidebar) {
         margin-top: calc(2em*var(--content-spacing-multiplier, 1));
     }
 
-    .gh-content * + .gh-sidebar {
+    .gh-content *+.gh-sidebar {
         margin-top: 0;
     }
 
-    .is-active-li > .is-active-link {
+    .is-active-li>.is-active-link {
         font-weight: 700;
         color: var(--color-primary-text);
     }
@@ -1108,18 +1189,38 @@ a.toc-link {
 
 /* Define text color based on dark mode class */
 .has-light-text {
-    color: white; /* Text color for light text */
+    color: white;
+    /* Text color for light text */
 }
 
-.icon-moon, .icon-sun {
-    display: none;
-    align-items: center; /* Vertically centers content */
+.icon-moon,
+.icon-sun {
+    align-items: center;
+    /* Vertically centers content */
     stroke-width: 2.18;
     stroke-linecap: round;
     stroke-linejoin: round;
     width: 24px;
     height: 24px;
     fill: none;
+}
+
+/* Show the correct toggle icon immediately, before main.min.js runs, to prevent the icon
+   from flashing in after load. The is-dark-mode class is set on <html> in <head>. */
+.icon-moon {
+    display: flex;
+}
+
+.icon-sun {
+    display: none;
+}
+
+html.is-dark-mode .icon-moon {
+    display: none;
+}
+
+html.is-dark-mode .icon-sun {
+    display: flex;
 }
 
 .gh-article img:not(.kg-header-card-image):not(.gh-author-image):not(.gh-author-icon) {
@@ -1135,7 +1236,7 @@ a.toc-link {
     padding: 6px 16px;
     display: inline-flex;
     align-items: center;
-    gap: 8px;       
+    gap: 8px;
 }
 
 .gh-button-share svg {
@@ -1150,14 +1251,20 @@ a.toc-link {
         font-weight: 500;
     }
 
+}
+
+@media (max-width: 480px) {
     .gh-navigation-text {
         display: none;
     }
-
 }
 
 .gh-button-share {
     font-size: 1.7rem;
+}
+
+.gh-share-text {
+    font-weight: 600;
 }
 
 .navigation-icon {

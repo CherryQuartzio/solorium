@@ -45,126 +45,42 @@
     </style>
 
     <script>
-        const originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
-        let textColor;
+        var originalBackgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+    </script>
+    <script src="{{asset "js/theme-head.js"}}"></script>
+    <script>
+        // Initialize theme and event listeners after DOM is ready
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initial run to load dark mode preference
+            originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
 
-        // Function to dynamically set text color based on background color
-        function setTextColorBasedOnBackground() {
-            /* Get the current global background color of the site */          
-            let bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim().slice(1);
+            // determine the shade of the current accent color for contrast adjustment in theme switching
+            var accentColor = originalAccentColor.trim().slice(1);
+            var r = parseInt(accentColor.substr(0, 2), 16);
+            var g = parseInt(accentColor.substr(2, 2), 16);
+            var b = parseInt(accentColor.substr(4, 2), 16);
+            var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            originalAccentColorShade = (yiq >= 128) ? 'bright' : 'dim';
 
-            /* The script for calculating the color contrast was taken from
-            https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
-            let r = parseInt(bgColor.substr(0, 2), 16);
-            let g = parseInt(bgColor.substr(2, 2), 16);
-            let b = parseInt(bgColor.substr(4, 2), 16);
-            let yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-            
-            // Determine if text color should be light or dark
-            textColor = (yiq >= 128) ? 'dark' : 'light';
-            
-            // Apply the determined text color class to the root element
-            document.documentElement.className = document.documentElement.className.replace(/has-(light|dark)-text/, ''); // remove existing text color class
-            document.documentElement.className = `has-${textColor}-text`;
-        }
+            initColorTheme();
 
-        // To prevent theme flashing on load, apply all colors before page load
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.documentElement.style.setProperty('--background-color', 'var(--dark-mode-background-color)');
-        }
+            // Event listener: Right click the theme toggle button to reset to system preference
+            document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(function (button) {
+                button.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
+                    initColorTheme(); // re-initialize theme based on system preference
+                });
+            });
 
-        setTextColorBasedOnBackground(); // Initial run to set text color based on initial background color
-
-        function setAccentColorBasedOnTextColor() {
-            // select all standalone a tags in .gh-content
-            allAtagsSelector = '.gh-content a:not(.toc-link):not(.kg-btn):not(.kg-cta-button):not(.kg-header-card-button):not(.gh-author-name-list > a):not(.kg-header-card-heading > a)';
-            allAtags = document.querySelectorAll(allAtagsSelector);
-            // select all blockquotes in .gh-content and set their border color to the original accent color for better contrast
-            allBlockquotes = document.querySelectorAll('.gh-content blockquote')
-            allInlineCode = document.querySelectorAll(':not(pre) > code'); // select all inline code blocks in .gh-content
-
-            if (textColor === 'dark' || originalAccentColorShade === 'bright') { // light background or light original accent color
-                // document.documentElement.style.setProperty('--ghost-accent-color', originalAccentColor);
-
-                if (allAtags.length > 0) allAtags.forEach(a => a.style.color = originalAccentColor); // set all a tags in .gh-content to the original accent color for better contrast in light mode
-                if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = originalAccentColor); // set all blockquotes in .gh-content to the original accent color for better contrast in light mode
-                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.color = originalAccentColor); // set all inline code blocks in .gh-content to a slightly transparent version of the original accent color for better contrast in light mode
-            } else { // dark background, increase contrast
-                let accentRgb = originalAccentColor.trim().slice(1); // remove the '#' from hex color
-                r = Math.min(255, parseInt(accentRgb.substr(0, 2), 16) + 60);
-                g = Math.min(255, parseInt(accentRgb.substr(2, 2), 16) + 60);
-                b = Math.min(255, parseInt(accentRgb.substr(4, 2), 16) + 60);
-                //document.documentElement.style.setProperty('--ghost-accent-color', `rgb(${r}, ${g}, ${b})`);
-
-                if (allAtags.length > 0) allAtags.forEach(a => a.style.color = `rgb(${r}, ${g}, ${b})`);
-                if (allBlockquotes.length > 0) allBlockquotes.forEach(blockquote => blockquote.style.borderColor = `rgb(${r}, ${g}, ${b})`); // set all blockquotes in .gh-content to the lightened accent color for better contrast in dark mode
-                if (allInlineCode.length > 0) allInlineCode.forEach(code => code.style.color = `rgb(${r}, ${g}, ${b}, 1)`); // set all inline code blocks in .gh-content to a slightly lightened background color for better contrast in dark mode
-            }
-        }
-
-        // Function to toggle dark mode and change body background color
-        function changeColorTheme(mode = 'switch') {
-            if (mode === 'switch') {
-                localStorage.setItem('autoDarkMode', false); // disable auto dark mode when user manually toggles theme
-                mode = localStorage.getItem('darkMode') === 'true' ? 'light' : 'dark';
-            }
-
-            if (mode === 'light') {
-                showSunToggleIcon(false); // display moon icon, hide sun icon
-                document.documentElement.style.setProperty('--background-color', originalBackgroundColor); // Set light background
-                localStorage.setItem('darkMode', false);
-                setTextColorBasedOnBackground();
-                setAccentColorBasedOnTextColor();
-                return;
-            } else if (mode === 'dark') {
-                showSunToggleIcon(true); // display sun icon, hide moon icon
-                document.documentElement.style.setProperty('--background-color', 'var(--dark-mode-background-color)'); // Set dark background
-                localStorage.setItem('darkMode', true);
-                setTextColorBasedOnBackground();
-                setAccentColorBasedOnTextColor();
-                return;
-            }
-        }
-
-        // Function to update icon visibility based on the mode
-        function showSunToggleIcon(is_currently_dark) {
-            const moonIcons = document.querySelectorAll('.icon-moon');
-            const sunIcons = document.querySelectorAll('.icon-sun');
-            
-            if (is_currently_dark) {
-                moonIcons.forEach(icon => icon.style.display = 'none');
-                sunIcons.forEach(icon => icon.style.display = 'flex');
-            } else {
-                moonIcons.forEach(icon => icon.style.display = 'flex');
-                sunIcons.forEach(icon => icon.style.display = 'none');
-            }
-        }
-
-        // Check and apply dark mode preference from local storage
-        function initColorTheme() {
-            const prefers_dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const previous_dark_state = localStorage.getItem('darkMode');
-
-            if (previous_dark_state === null)
-                localStorage.setItem('autoDarkMode', true);
-
-            // set based on system preference if there is no manual preference, otherwise set based on manual preference
-            if (localStorage.getItem('autoDarkMode') === 'true') {
-                if (prefers_dark) {
-                    changeColorTheme('dark');
-                } else {
-                    changeColorTheme('light');
+            // Event listener: Automatically change theme if system preference changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                if (localStorage.getItem('autoDarkMode') === 'true') {
+                    var newColorScheme = e.matches ? 'dark' : 'light';
+                    changeColorTheme(newColorScheme);
                 }
-            }
-            else if (previous_dark_state === 'true') { // restore dark mode if it was previously enabled
-                showSunToggleIcon(true);
-                setAccentColorBasedOnTextColor();
-            }
-            else {
-                showSunToggleIcon(false);
-                //setAccentColorBasedOnTextColor();
-            }
-        }
+            });
+        });
     </script>
     
     {{ghost_head}}
@@ -258,63 +174,7 @@
 
     {{! Initialize Tocbot after you load the script }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.12.3/tocbot.min.js"></script>
-    <script>
-        tocbot.init({
-            // Where to render the table of contents.
-            tocSelector: '.gh-toc',
-            // Where to grab the headings to build the table of contents.
-            contentSelector: '.gh-content',
-            // Which headings to grab inside of the contentSelector element.
-            headingSelector: 'h1, h2, h3, h4',
-            // Ensure correct positioning
-            hasInnerContainers: true,
-            collapseDepth: 6,
-            orderedList: false,
-        });
 
-        // Initial run to load dark mode preference
-        const originalAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--ghost-accent-color');
-
-        // determine the shade of the current accent color for contrast adjustment in theme switching
-        let accentColor = originalAccentColor.trim().slice(1);
-        r = parseInt(accentColor.substr(0, 2), 16);
-        g = parseInt(accentColor.substr(2, 2), 16);
-        b = parseInt(accentColor.substr(4, 2), 16);
-        yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-        const originalAccentColorShade = (yiq >= 128) ? 'bright' : 'dim';
-        
-        initColorTheme();
-
-        // remove table of contents if there are no headings in the content or if the page is restricted and the user doesn't have access
-        if (document.querySelector('.gh-sidebar') && (document.querySelectorAll('.gh-toc .toc-link').length === 0 || document.querySelector('.gh-cta'))) {
-            document.querySelector('.gh-sidebar').style.display = 'none';
-        }
-
-        // Event listener: Right click the theme toggle button to reset to system preference
-        document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(button => {
-            button.addEventListener('contextmenu', e => {
-                e.preventDefault();
-                localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
-                initColorTheme(); // re-initialize theme based on system preference
-            });
-        });
-
-        // Event listener: Automatically change theme if system preference changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (localStorage.getItem('autoDarkMode') === 'true') {
-                const newColorScheme = e.matches ? 'dark' : 'light';
-                changeColorTheme(newColorScheme);
-            }
-        });
-
-        // Event listener: Keyboard shortcut (Ctrl + K) to open search
-        document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                document.querySelector('[data-ghost-search]').click();
-            }
-        });
-    </script>
 
     <footer class="gh-foot gh-outer">
         <div class="gh-foot-inner gh-inner">

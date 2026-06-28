@@ -1,92 +1,128 @@
-{{!< default}}
-
-<main class="gh-main gh-outer">
+{{!< default}} <main class="gh-main gh-outer">
     <div class="gh-inner">
         {{#post}}
-            <article class="gh-article {{post_class}}">
-                {{#if feature_image}}
-                    <header class="gh-article-header gh-canvas">
-                        <h1 class="gh-article-title">{{title}}</h1>
-                        {{#if custom_excerpt}}
-                            <p class="gh-article-excerpt">{{custom_excerpt}}</p>
-                        {{/if}}
-                        {{> "feature-image"}}
-                    </header>
+        <article class="gh-article {{post_class}}">
+            {{#if feature_image}}
+            <header class="gh-article-header gh-canvas">
+                <h1 class="gh-article-title">{{title}}</h1>
+                {{#if custom_excerpt}}
+                <p class="gh-article-excerpt">{{custom_excerpt}}</p>
                 {{/if}}
-
-                <section class="gh-content gh-canvas">
-                    {{content}}
-                    {{#unless feature_image}}
-                        <header class="gh-article-header">
-                            <h1 class="gh-article-title">{{title}}</h1>
-                            {{#if custom_excerpt}}
-                                <p class="gh-article-excerpt">{{custom_excerpt}}</p>
-                            {{/if}}
-                        </header>
-                    {{/unless}}
-                    <aside class="gh-article-meta">
-                        <div class="gh-article-meta-inner">
-                            <div class="gh-author-image-list instapaper_ignore">
-                                {{#foreach authors}}
-                                    <a class="gh-author-image" href="{{url}}">
-                                        {{#if profile_image}}
-                                            <img src="{{profile_image}}" alt="{{name}}">
-                                        {{else}}
-                                            <div class="gh-author-icon">{{> icons/avatar}}</div>
-                                        {{/if}}
-                                    </a>
-                                {{/foreach}}
-                            </div>
-                            <div class="gh-article-meta-wrapper">
-                                <div class="gh-author-name-list">
-                                    {{authors}}
-                                </div>
-                                <div class="gh-card-meta">
-                                    <time class="gh-article-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="DD MMM YYYY"}}</time>
-                                    {{#if reading_time}}
-                                        <span class="gh-article-date">{{reading_time}}</span>
+                <div class="gh-article-meta">
+                    <ul class="gh-author-image-list">
+                        {{#foreach authors}}
+                            <li class="gh-author-image-item">
+                                <a href="{{url}}" class="gh-author-image">
+                                    {{#if profile_image}}
+                                        <img src="{{img_url profile_image size="xs"}}" alt="{{name}}">
+                                    {{else}}
+                                        <div class="gh-author-icon">{{> icons/avatar}}</div>
                                     {{/if}}
-                                </div>
-                            </div>
-                            {{#if primary_tag}}
-                                <a class="gh-article-tag" href="{{primary_tag.url}}" style="--tag-color: {{primary_tag.accent_color}}">{{primary_tag.name}}</a>
+                                </a>
+                            </li>
+                        {{/foreach}}
+                    </ul>
+                    <div class="gh-article-meta-wrapper">
+                        <div class="gh-author-name-list">
+                            {{authors}}
+                        </div>
+                        <div class="gh-card-meta">
+                            <time class="gh-article-date" datetime="{{date format=" YYYY-MM-DD"}}">{{date format="DD MMM
+                                YYYY"}}</time>
+                            {{#if reading_time}}
+                            <span class="gh-article-date">{{reading_time}}</span>
                             {{/if}}
-                            {{#if @custom.show_table_of_contents_in_posts}}
-                                <div class="gh-toc"></div>
-                            {{/if}}
-                        </div>  
-                    </aside>
-                </section>
-
-                {{#if comments}}
-                    <div class="gh-comments gh-canvas">
-                        <h2 class="gh-comments-title">{{comment_count empty="" single="comment" plural="comments"}}</h2>
-                        {{comments title="" count=false}}
+                        </div>
                     </div>
+                    {{#if @custom.show_share_button}}
+                    <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{>
+                        "icons/share"}} <span class="gh-share-text">Share</span></a>
+                    {{/if}}
+                </div>
+                {{#if tags}}
+                <div class="gh-article-tags">
+                    {{#foreach tags}}
+                    <a class="gh-article-tag" href="{{url}}" style="--tag-color: {{accent_color}}">{{name}}</a>
+                    {{/foreach}}
+                </div>
                 {{/if}}
+                {{> "feature-image"}}
+            </header>
+            {{/if}}
 
-                <footer class="gh-article-footer gh-canvas">
-                    <nav class="gh-navigation">
-                        <div class="gh-navigation-previous">
-                            {{#prev_post}}
-                                <a class="gh-navigation-link" aria-label="Go to the previous post" title="Previous post"href="{{url}}"><span class="navigation-icon">{{> "icons/arrow-left"}}</span> <span class="gh-navigation-text">{{t "Prev"}}</span></a>
-                            {{/prev_post}}
+            <section class="gh-content gh-canvas">
+                {{#unless feature_image}}
+                <header class="gh-article-header">
+                    <h1 class="gh-article-title">{{title}}</h1>
+                    {{#if custom_excerpt}}
+                    <p class="gh-article-excerpt">{{custom_excerpt}}</p>
+                    {{/if}}
+                    {{#if tags}}
+                    <div class="gh-article-tags">
+                        {{#foreach tags}}
+                        <a class="gh-article-tag" href="{{url}}" style="--tag-color: {{accent_color}}">{{name}}</a>
+                        {{/foreach}}
+                    </div>
+                    {{/if}}
+                    <div class="gh-article-meta">
+                        <div class="gh-article-meta-wrapper">
+                            <div class="gh-author-name-list">
+                                {{authors}}
+                            </div>
+                            <div class="gh-card-meta">
+                                <time class="gh-article-date" datetime="{{date format=" YYYY-MM-DD"}}">{{date format="DD
+                                    MMM YYYY"}}</time>
+                                {{#if reading_time}}
+                                <span class="gh-article-date">{{reading_time}}</span>
+                                {{/if}}
+                            </div>
                         </div>
+                        {{#if @custom.show_share_button}}
+                        <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{>
+                            "icons/share"}} <span class="gh-share-text">Share</span></a>
+                        {{/if}}
+                    </div>
+                </header>
+                {{/unless}}
+                {{content}}
+                {{#if @custom.show_table_of_contents_in_posts}}
+                <hr class="gh-toc-divider">
+                <div class="gh-sidebar">
+                    <div class="gh-toc"></div>
+                </div>
+                {{/if}}
+            </section>
 
-                        <div class="gh-navigation-middle">
-                            {{#if @custom.show_share_button}}
-                                <a href="#/share" class="gh-button-share" aria-label="Share this post" title="Share post">{{> "icons/share"}} Share</a>
-                            {{/if}}
-                        </div>
+            {{#if comments}}
+            <div class="gh-comments gh-canvas">
+                <h2 class="gh-comments-title">{{comment_count empty="" single="comment" plural="comments"}}</h2>
+                {{comments title="" count=false}}
+            </div>
+            {{/if}}
 
-                        <div class="gh-navigation-next">
-                            {{#next_post}}
-                                <a class="gh-navigation-link" aria-label="Go to the next post" title="Next post" href="{{url}}"><span class="gh-navigation-text">{{t "Next"}}</span> <span class="navigation-icon">{{> "icons/arrow-right"}}</span></a>
-                            {{/next_post}}
-                        </div>
-                    </nav>
-                </footer>
-            </article>
+            <footer class="gh-article-footer gh-canvas">
+                <nav class="gh-navigation">
+                    <div class="gh-navigation-previous">
+                        {{#prev_post}}
+                        <a class="gh-navigation-link" aria-label="Go to the previous post" title="Previous post"
+                            href="{{url}}"><span class="navigation-icon">{{> "icons/arrow-left"}}</span> <span
+                                class="gh-navigation-text">{{t "Previous"}}</span></a>
+                        {{/prev_post}}
+                    </div>
+
+                    <div class="gh-navigation-middle">
+                    </div>
+
+                    <div class="gh-navigation-next">
+                        {{#next_post}}
+                        <a class="gh-navigation-link" aria-label="Go to the next post" title="Next post"
+                            href="{{url}}"><span class="gh-navigation-text">{{t "Next"}}</span> <span
+                                class="navigation-icon">{{> "icons/arrow-right"}}</span></a>
+                        {{/next_post}}
+                    </div>
+                </nav>
+            </footer>
+        </article>
         {{/post}}
     </div>
-</main>
+    </main>
