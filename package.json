@@ -50,7 +50,7 @@
                 "type": "color",
                 "default": "#000000"
             },
-            "show_table_of_contents_in_pages": {
+            "show_table_of_contents": {
                 "type": "boolean",
                 "default": true
             },
@@ -89,9 +89,9 @@
                 "default": true,
                 "group": "post"
             },
-            "show_table_of_contents_in_posts": {
+            "show_all_post_tags": {
                 "type": "boolean",
-                "default": false,
+                "default": true,
                 "group": "post"
             },
             "primary_header": {

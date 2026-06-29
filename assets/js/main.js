@@ -24,6 +24,17 @@ function initParallax() {
 })();
 
 (function () {
+    const dismissBtn = document.getElementById('dismiss-cover');
+    const content = document.getElementById('content');
+    
+    if (!dismissBtn || !content) return;
+
+    dismissBtn.addEventListener('click', function () {
+        content.scrollIntoView({ behavior: 'smooth' });
+    });
+})();
+
+(function () {
     const toggle = document.querySelector('[data-toggle-comments]');
     if (!toggle) return;
 

@@ -35,6 +35,17 @@
                 {{#if reading_time}}
                     <span class="gh-card-length">{{reading_time}}</span>
                 {{/if}}
+                {{#if tags}}
+                    {{#if @custom.show_all_post_tags}}
+                        {{#foreach tags}}
+                        <span class="gh-card-length">{{name}}</span>
+                        {{/foreach}}
+                    {{else}}
+                        {{#foreach tags limit="1"}}
+                        <span class="gh-card-length">{{name}}</span>
+                        {{/foreach}}
+                    {{/if}}
+                {{/if}}
                 {{#unless access}}
                 {{^has visibility="public"}}
                     <span class="gh-card-access">
@@ -54,4 +65,9 @@
         </div>
 
     </a>
+    {{#if featured}}
+        <span class="gh-card-featured">
+            {{> "icons/star"}} Featured
+        </span>
+    {{/if}}
 </article>

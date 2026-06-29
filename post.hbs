@@ -32,6 +32,17 @@
                             {{#if reading_time}}
                             <span class="gh-article-date">{{reading_time}}</span>
                             {{/if}}
+                            {{#if tags}}
+                                {{#if @custom.show_all_post_tags}}
+                                    {{#foreach tags}}
+                                    <a class="gh-article-date" href="{{url}}">{{name}}</a>
+                                    {{/foreach}}
+                                {{else}}
+                                    {{#foreach tags limit="1"}}
+                                    <a class="gh-article-date" href="{{url}}">{{name}}</a>
+                                    {{/foreach}}
+                                {{/if}}
+                            {{/if}}
                         </div>
                     </div>
                     {{#if @custom.show_share_button}}
@@ -39,13 +50,6 @@
                         "icons/share"}} <span class="gh-share-text">Share</span></a>
                     {{/if}}
                 </div>
-                {{#if tags}}
-                <div class="gh-article-tags">
-                    {{#foreach tags}}
-                    <a class="gh-article-tag" href="{{url}}" style="--tag-color: {{accent_color}}">{{name}}</a>
-                    {{/foreach}}
-                </div>
-                {{/if}}
                 {{> "feature-image"}}
             </header>
             {{/if}}
@@ -56,13 +60,6 @@
                     <h1 class="gh-article-title">{{title}}</h1>
                     {{#if custom_excerpt}}
                     <p class="gh-article-excerpt">{{custom_excerpt}}</p>
-                    {{/if}}
-                    {{#if tags}}
-                    <div class="gh-article-tags">
-                        {{#foreach tags}}
-                        <a class="gh-article-tag" href="{{url}}" style="--tag-color: {{accent_color}}">{{name}}</a>
-                        {{/foreach}}
-                    </div>
                     {{/if}}
                     <div class="gh-article-meta">
                         <div class="gh-article-meta-wrapper">
@@ -75,6 +72,17 @@
                                 {{#if reading_time}}
                                 <span class="gh-article-date">{{reading_time}}</span>
                                 {{/if}}
+                                {{#if tags}}
+                                    {{#if @custom.show_all_post_tags}}
+                                        {{#foreach tags}}
+                                        <a class="gh-article-date" href="{{url}}">{{name}}</a>
+                                        {{/foreach}}
+                                    {{else}}
+                                        {{#foreach tags limit="1"}}
+                                        <a class="gh-article-date" href="{{url}}">{{name}}</a>
+                                        {{/foreach}}
+                                    {{/if}}
+                                {{/if}}
                             </div>
                         </div>
                         {{#if @custom.show_share_button}}
@@ -85,7 +93,7 @@
                 </header>
                 {{/unless}}
                 {{content}}
-                {{#if @custom.show_table_of_contents_in_posts}}
+                {{#if @custom.show_table_of_contents}}
                 <hr class="gh-toc-divider">
                 <div class="gh-sidebar">
                     <div class="gh-toc"></div>

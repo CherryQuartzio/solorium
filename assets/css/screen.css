@@ -74,8 +74,8 @@ hr {
     }
 }
 
-/* Page template: When no TOC, explicitly center title+excerpt in the 12-col header grid */
-body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+/* Page template: When no TOC, explicitly center title+excerpt in the 12-col header grid, ONLY if no cover image */
+body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
     grid-column: 4 / span 6;
 }
 
@@ -132,7 +132,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
 
 .gh-head-logo {
     font-family: Urbanist, sans-serif;
-    font-weight: normal;
+    font-weight: 500;
     text-transform: lowercase;
 }
 
@@ -152,6 +152,27 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
 
 .gh-head-menu a {
     color: inherit;
+}
+
+/* Match burger menu thickness to SVG icons */
+.gh-burger::before,
+.gh-burger::after {
+    height: 2.18px;
+    border-radius: 99px;
+    bottom: auto;
+}
+
+.gh-burger::before {
+    top: 10.91px;
+}
+
+.gh-burger::after {
+    top: 16.91px;
+}
+
+.is-head-open .gh-burger::before,
+.is-head-open .gh-burger::after {
+    top: 13.91px;
 }
 
 @media (max-width: 991px) {
@@ -179,7 +200,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
    dropdown.js adds .is-dropdown-loaded after the logo image loads, which caused the menu
    to flash in after the page was already visible. */
 @media (min-width: 768px) {
-    body:not(.is-dropdown-loaded) .gh-head-menu .nav > li {
+    body:not(.is-dropdown-loaded) .gh-head-menu .nav>li {
         opacity: 1;
     }
 }
@@ -465,6 +486,29 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
     margin-right: -5px;
 }
 
+.gh-card-featured {
+    padding: 0 10px 0 8px;
+    margin-left: 4px;
+    background-color: var(--color-border);
+    border-radius: 40px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 500;
+    gap: 8px;
+    width: fit-content;
+    margin-top: 8px;
+}
+
+.has-parallax-feed .gh-card-featured {
+    color: black;
+    background-color: var(--color-white);
+}
+
+.gh-card-featured svg {
+    margin-right: -5px;
+}
+
 /* Classic feed
 /* ---------------------------------------------------------- */
 
@@ -494,7 +538,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
 
 .has-classic-feed .gh-card-image::before {
     display: block;
-    padding-bottom: 56.25%;
+    padding-bottom: 50%;
     content: "";
 }
 
@@ -660,13 +704,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
 /* Article
 /* ---------------------------------------------------------- */
 
-.gh-article-tags {
-    grid-column: 1 / span 9;
-    margin-top: 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
+
 
 .gh-article-meta {
     grid-column: 1 / span 12;
@@ -674,11 +712,36 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
     display: flex;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+}
+
+.gh-article-meta-wrapper {
+    overflow: hidden;
+    min-width: 0;
 }
 
 .gh-article-meta .gh-card-meta {
     margin-top: 4px;
+    margin-left: -16px;
+    gap: 0;
+    row-gap: 4px;
+}
+
+.gh-article-meta .gh-card-meta>* {
+    margin-left: 16px;
+    position: relative;
+}
+
+.gh-article-meta .gh-card-meta>*::before {
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 2px;
+    content: "";
+    background-color: currentColor;
+    border-radius: 50%;
 }
 
 .gh-article-meta .gh-button-share {
@@ -756,7 +819,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
 }
 
 .gh-article-meta .gh-author-name-list a {
-    font-size: 1.9rem;
+    font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     text-decoration: none;
@@ -769,18 +832,7 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
     color: var(--color-secondary-text);
 }
 
-.gh-article-tag {
-    display: inline-block;
-    width: fit-content;
-    padding: 2px 12px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--tag-color, var(--color-darker-gray)) !important;
-    text-decoration: none !important;
-    letter-spacing: -0.01em;
-    border: 1px solid var(--color-border);
-    border-radius: 24px;
-}
+
 
 .gh-content .gh-article-header {
     grid-row-start: 1;
@@ -871,8 +923,8 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
         grid-column: 1 / span 10;
     }
 
-    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
-    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) ONLY if no cover image */
+    body.page-template .no-image .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
         grid-column: 3 / span 8;
     }
 
@@ -887,8 +939,8 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
         grid-column: 1 / span 12;
     }
 
-    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
-    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) ONLY if no cover image */
+    body.page-template .no-image .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
         grid-column: 2 / span 10;
     }
 
@@ -896,14 +948,35 @@ body.page-template.no-toc .gh-article-header :is(.gh-article-title, .gh-article-
         font-size: var(--content-font-size);
     }
 
-    .gh-share-text {
-        display: none;
+    .gh-article-meta {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        row-gap: 16px;
+        column-gap: 16px;
+    }
+
+    .gh-article-meta .gh-author-image-list {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .gh-article-meta .gh-button-share {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        margin-left: 0;
+    }
+
+    .gh-article-meta-wrapper {
+        grid-column: 1 / span 2;
+        grid-row: 2;
     }
 }
 
 @media (max-width: 480px) {
-    /* Page template: always center title+excerpt at narrow widths (TOC is below content) */
-    body.page-template .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
+
+    /* Page template: always center title+excerpt at narrow widths (TOC is below content) ONLY if no cover image */
+    body.page-template .no-image .gh-article-header :is(.gh-article-title, .gh-article-excerpt) {
         grid-column: 1 / span 12;
     }
 }

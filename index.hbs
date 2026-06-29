@@ -52,12 +52,12 @@
             </div>
         </div>
         {{#match @custom.header_section_layout "=" "Large background"}}
-        <div class="cover-arrow">{{> "icons/caret-down"}}</div>
+        <button class="cover-arrow" id="dismiss-cover">{{> "icons/caret-down"}}</button>
         {{/match}}
     </div>
 </section>
 
-<main class="gh-main gh-outer">
+<main id="content" class="gh-main gh-outer">
     <div class="gh-feed gh-inner">
         {{#if @custom.show_restricted_posts}}
             {{#foreach posts}}
