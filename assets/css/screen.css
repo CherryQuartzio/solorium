@@ -352,6 +352,7 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
 
 .has-background-about .gh-about {
     position: relative;
+    margin-bottom: 0;
 }
 
 .has-background-about .gh-about::before {
@@ -363,7 +364,7 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
 }
 
 .has-background-about .gh-about.initialized::before {
-    opacity: 0.4;
+    opacity: 0;
 }
 
 .has-background-about .gh-about-inner {
@@ -1625,7 +1626,7 @@ body main .kg-card.kg-header-card+.kg-card.kg-header-card {
     color: var(--color-primary-text) !important;
     text-align: left !important;
     border-radius: .25em;
-    padding: 32px 24px !important;
+    padding: 28px 20px !important;
     font-family: var(--gh-font-body, var(--font-sans)) !important;
 }
 
@@ -1646,4 +1647,56 @@ body main .kg-card.kg-header-card+.kg-card.kg-header-card {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
     border-top: none !important;
+}
+
+/* Light Background Overrides
+/* ---------------------------------------------------------- */
+
+/* Cover text */
+.is-light-bg.has-background-about .gh-about-primary,
+.is-light-bg.has-background-about .gh-about-secondary {
+    color: #15171a;
+}
+
+.is-light-bg.has-background-about .cover-arrow {
+    color: #15171a;
+}
+
+.is-light-bg.has-background-about .cover-arrow svg {
+    fill: currentColor;
+}
+
+.is-light-bg.has-background-about .cover-arrow svg polyline {
+    stroke: currentColor;
+}
+
+/* Header colors */
+.is-light-bg.is-head-transparent .gh-head .nav>li a,
+.is-light-bg.is-head-transparent .gh-head-description,
+.is-light-bg.is-head-transparent .gh-head-link,
+.is-light-bg.is-head-transparent .gh-head-logo,
+.is-light-bg.is-head-transparent .gh-head-logo a,
+.is-light-bg.is-head-transparent .gh-search,
+.is-light-bg.is-head-transparent .gh-social,
+.is-light-bg.is-head-transparent .nav-more-toggle {
+    color: #15171a;
+}
+
+.is-light-bg.is-head-transparent .gh-burger::before,
+.is-light-bg.is-head-transparent .gh-burger::after {
+    background-color: #15171a;
+}
+
+.is-light-bg.is-head-transparent .gh-head-btn {
+    background-color: #15171a;
+    color: #fff;
+}
+
+.is-light-bg.is-head-transparent .gh-head-menu::before,
+.is-light-bg.is-head-transparent .gh-head-menu::after {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.is-light-bg.is-head-transparent .gh-icon-tooltip {
+    color: rgba(0, 0, 0, 0.7);
 }

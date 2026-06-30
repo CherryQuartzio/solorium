@@ -5,7 +5,7 @@
         {{#match @custom.header_section_layout "!=" "Typographic profile"}}
             {{#match @custom.header_section_layout "=" "Large background"}}
                 {{#if @site.cover_image}}
-                    <img class="gh-about-image" 
+                    <img class="gh-about-image" crossorigin="anonymous"
                         srcset="{{img_url @site.cover_image size="s"}} 300w,
                             {{img_url @site.cover_image size="m"}} 720w,
                             {{img_url @site.cover_image size="l"}} 960w,
@@ -16,7 +16,7 @@
                 {{/if}}
             {{else}}
                 {{#if @site.cover_image}}
-                    <img class="gh-about-image" 
+                    <img class="gh-about-image" crossorigin="anonymous"
                         srcset="{{img_url @site.cover_image size="s"}} 300w,
                             {{img_url @site.cover_image size="m"}} 720w"
                         sizes="(max-width: 720px) 100vw, 50vw"
@@ -39,6 +39,41 @@
 
                 //about.style.setProperty('--about-height', image.clientWidth * image.naturalHeight / image.naturalWidth + 'px');
                 about.classList.add('initialized');
+
+                if (image) {
+                    const checkBrightness = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 100;
+                        canvas.height = 100;
+                        const ctx = canvas.getContext('2d');
+                        try {
+                            ctx.drawImage(image, 0, 0, 100, 100);
+                            const data = ctx.getImageData(0, 0, 100, 100).data;
+                            let r = 0, g = 0, b = 0;
+                            const pixels = data.length / 4;
+                            for (let i = 0; i < data.length; i += 4) {
+                                r += data[i];
+                                g += data[i + 1];
+                                b += data[i + 2];
+                            }
+                            r = Math.floor(r / pixels);
+                            g = Math.floor(g / pixels);
+                            b = Math.floor(b / pixels);
+                            const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+                            if (yiq >= 128) {
+                                document.body.classList.add('is-light-bg');
+                            }
+                        } catch (e) {
+                            console.warn('Could not calculate cover image brightness:', e);
+                        }
+                    };
+
+                    if (image.complete) {
+                        checkBrightness();
+                    } else {
+                        image.addEventListener('load', checkBrightness);
+                    }
+                }
             })();
         </script>
         <div class="gh-about-content">
