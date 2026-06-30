@@ -64,14 +64,7 @@
 
             initColorTheme();
 
-            // Event listener: Right click the theme toggle button to reset to system preference
-            document.querySelectorAll('[onclick="changeColorTheme()"]').forEach(function (button) {
-                button.addEventListener('contextmenu', function (e) {
-                    e.preventDefault();
-                    localStorage.removeItem('darkMode'); // remove manual preference to revert to system preference
-                    initColorTheme(); // re-initialize theme based on system preference
-                });
-            });
+
 
             // Event listener: Automatically change theme if system preference changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
@@ -105,17 +98,21 @@
                         {{/if}}
                     </a>
                 </div>
-                <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle theme" onclick="changeColorTheme()">
+                <button class="gh-search gh-icon-btn gh-has-tooltip" id="theme-button" aria-label="Toggle theme" onclick="changeColorTheme()">
+                    <div class="icon-system">
+                        {{> "icons/half-sun-moon"}}
+                    </div>
                     <div class="icon-moon">
                         {{> "icons/moon"}}
                     </div>
                     <div class="icon-sun">
                         {{> "icons/sun"}}
                     </div>
+                    <span class="gh-icon-tooltip">Theme</span>
                 </button>
-                <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                <button class="gh-search gh-icon-btn gh-has-tooltip" id="search-button" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}<span class="gh-icon-tooltip">Search</span></button>
                 {{#if @site.navigation}}
-                    <button class="gh-burger" aria-label="Toggle menu"></button>
+                    <button class="gh-burger gh-has-tooltip" aria-label="Toggle menu"><span class="gh-icon-tooltip">Menu</span></button>
                 {{/if}}
             </div>
 
@@ -123,29 +120,37 @@
                 {{navigation}}
                 {{#unless @site.members_enabled}}
                     {{#match @custom.navigation_layout "Stacked"}}
-                        <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
-                        <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle site theme" onclick="changeColorTheme()">
+                        <button class="gh-search gh-icon-btn gh-has-tooltip" id="search-button" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}<span class="gh-icon-tooltip">Search</span></button>
+                        <button class="gh-search gh-icon-btn gh-has-tooltip" id="theme-button" aria-label="Toggle site theme" onclick="changeColorTheme()">
+                            <div class="icon-system">
+                                {{> "icons/half-sun-moon"}}
+                            </div>
                             <div class="icon-moon">
                                 {{> "icons/moon"}}
                             </div>
                             <div class="icon-sun">
                                 {{> "icons/sun"}}
                             </div>
+                            <span class="gh-icon-tooltip">Theme</span>
                         </button>
                     {{/match}}
                 {{/unless}}
             </nav>
 
             <div class="gh-head-actions">
-                <button class="gh-search gh-icon-btn" id="theme-button" title="Toggle site theme&#10;Right-click to follow system theme" aria-label="Toggle theme" onclick="changeColorTheme()">
+                <button class="gh-search gh-icon-btn gh-has-tooltip" id="theme-button" aria-label="Toggle theme" onclick="changeColorTheme()">
+                    <div class="icon-system">
+                        {{> "icons/half-sun-moon"}}
+                    </div>
                     <div class="icon-moon">
                         {{> "icons/moon"}}
                     </div>
                     <div class="icon-sun">
                         {{> "icons/sun"}}
                     </div>
+                    <span class="gh-icon-tooltip">Theme</span>
                 </button>
-                <button class="gh-search gh-icon-btn" id="search-button" title="Search (Ctrl + K)" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                <button class="gh-search gh-icon-btn gh-has-tooltip" id="search-button" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}<span class="gh-icon-tooltip">Search</span></button>
                 {{#match @custom.show_account_on_header "Only when logged in"}}
                     {{#if @member}}
                         <div class="gh-head-members">
@@ -199,6 +204,29 @@
 {{/is}}
 
 <script src="{{asset "built/main.min.js"}}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var burgers = document.querySelectorAll('.gh-burger');
+        burgers.forEach(function (burger) {
+            var tooltip = burger.querySelector('.gh-icon-tooltip');
+            if (!tooltip) return;
+            
+            burger.addEventListener('click', function () {
+                setTimeout(function () {
+                    var isOpen = document.documentElement.classList.contains('is-head-open') || document.body.classList.contains('is-head-open');
+                    var newText = isOpen ? 'Close' : 'Menu';
+                    
+                    tooltip.classList.add('is-updating');
+                    setTimeout(function () {
+                        tooltip.textContent = newText;
+                        tooltip.classList.remove('is-updating');
+                    }, 200);
+                }, 10);
+            });
+        });
+    });
+</script>
 
 {{ghost_foot}}
 

@@ -63,3 +63,37 @@ function initParallax() {
 (function () {
     pagination(true, initParallax);
 })();
+
+// Strip Ghost's inline min-height/padding from kg-header-card elements
+// so our CSS rules (in screen.css) can control the layout instead.
+(function () {
+    function fixHeaderCards() {
+        document.querySelectorAll('.kg-header-card').forEach(function (card) {
+            // Strip Ghost's injected inline styles
+            card.style.removeProperty('min-height');
+            card.style.removeProperty('height');
+
+            card.querySelectorAll('*').forEach(function (el) {
+                el.style.removeProperty('min-height');
+                el.style.removeProperty('height');
+
+                if (
+                    el.classList.contains('kg-header-card-content') ||
+                    el.classList.contains('kg-header-card-text')
+                ) {
+                    el.style.removeProperty('padding');
+                    el.style.removeProperty('padding-top');
+                    el.style.removeProperty('padding-bottom');
+                    el.style.removeProperty('padding-left');
+                    el.style.removeProperty('padding-right');
+                }
+            });
+        });
+    }
+
+    // Run immediately for cards already in the DOM
+    fixHeaderCards();
+
+    // Re-run after any dynamic content loads (e.g., pagination)
+    document.addEventListener('ghost:card:loaded', fixHeaderCards);
+})();

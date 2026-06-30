@@ -25,6 +25,23 @@
                 {{/if}}
             </section>
         </article>
+
+        {{#has tag="#nav-page"}}
+        <template id="chevron-right-icon">
+            {{> "icons/chevron-right"}}
+        </template>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var template = document.getElementById('chevron-right-icon');
+                if (!template) return;
+                var links = document.querySelectorAll('.gh-content .kg-button-card .kg-btn');
+                links.forEach(function(link) {
+                    var clone = template.content.cloneNode(true);
+                    link.appendChild(clone);
+                });
+            });
+        </script>
+        {{/has}}
     </div>
 </main>
 

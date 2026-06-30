@@ -155,6 +155,11 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
 }
 
 /* Match burger menu thickness to SVG icons */
+.gh-burger {
+    margin-left: -6px;
+    margin-right: -6px;
+}
+
 .gh-burger::before,
 .gh-burger::after {
     height: 2.18px;
@@ -185,6 +190,12 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
     grid-template-columns: 1fr auto auto auto;
 }
 
+@media (max-width: 767px) {
+    #gh-head .gh-head-brand {
+        gap: 12px;
+    }
+}
+
 .is-head-left-logo .gh-head-inner {
     grid-template-columns: 1fr 50% 1fr;
 }
@@ -203,6 +214,42 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
     body:not(.is-dropdown-loaded) .gh-head-menu .nav>li {
         opacity: 1;
     }
+}
+
+/* Icon button tooltips
+/* ---------------------------------------------------------- */
+
+.gh-has-tooltip {
+    position: relative;
+}
+
+.gh-icon-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--color-secondary-text);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.is-head-transparent .gh-icon-tooltip {
+    color: var(--color-secondary-text-light);
+}
+
+@media (hover: hover) {
+    .gh-has-tooltip:hover .gh-icon-tooltip {
+        opacity: 1;
+    }
+}
+
+.gh-icon-tooltip.is-updating {
+    opacity: 0 !important;
 }
 
 /* About section
@@ -905,6 +952,23 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
     font-weight: 800;
 }
 
+.gh-content>.kg-card+[id],
+.gh-content>[id]:not(:first-child) {
+    margin-top: calc(0.8em * var(--content-spacing-multiplier, 1)) !important;
+}
+
+.gh-content>*+* {
+    margin-top: calc(1.2em * var(--content-spacing-multiplier, 1));
+}
+
+.gh-content>hr:not(.gh-toc-divider) {
+    margin: 0 !important;
+}
+
+.gh-content>hr:not(.gh-toc-divider)+* {
+    margin-top: calc(0.8em * var(--content-spacing-multiplier, 1)) !important;
+}
+
 .has-serif-font:not([class*=" gh-font-heading"]):not([class^="gh-font-heading"]):not([class*=" gh-font-body"]):not([class^="gh-font-body"]) .gh-content> :is([id], p, ul, ol) {
     font-family: var(--gh-font-body, var(--font-serif));
 }
@@ -1211,8 +1275,8 @@ a.toc-link {
 @media (max-width: 991px) {
     .gh-toc-divider {
         display: block;
-        margin-top: calc(var(--header-spacing, 80px) + 3rem);
-        margin-bottom: 3rem;
+        margin-top: calc(1.2em * var(--content-spacing-multiplier, 1)) !important;
+        margin-bottom: calc(1.2em * var(--content-spacing-multiplier, 1)) !important;
     }
 
     .gh-content *+.gh-sidebar {
@@ -1267,33 +1331,220 @@ a.toc-link {
 }
 
 .icon-moon,
-.icon-sun {
+.icon-sun,
+.icon-system {
+    display: none;
     align-items: center;
-    /* Vertically centers content */
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    fill: none;
     stroke-width: 2.18;
     stroke-linecap: round;
     stroke-linejoin: round;
-    width: 24px;
-    height: 24px;
-    fill: none;
+}
+
+.icon-moon svg,
+.icon-sun svg,
+.icon-system svg {
+    width: 20px;
+    height: 20px;
 }
 
 /* Show the correct toggle icon immediately, before main.min.js runs, to prevent the icon
-   from flashing in after load. The is-dark-mode class is set on <html> in <head>. */
-.icon-moon {
+   from flashing in after load. The is-dark-mode, is-light-mode classes are set on <html> in <head>.
+   If neither is set, we default to the system icon. */
+.icon-system {
     display: flex;
 }
 
-.icon-sun {
+html.is-light-mode .icon-system {
+    display: none;
+}
+
+html.is-light-mode .icon-sun {
+    display: flex;
+}
+
+html.is-dark-mode .icon-system {
     display: none;
 }
 
 html.is-dark-mode .icon-moon {
-    display: none;
+    display: flex;
 }
 
-html.is-dark-mode .icon-sun {
-    display: flex;
+/* Overhaul for kg-header-card to fix Ghost's default grids, padding, and min-heights */
+body main .kg-card.kg-header-card {
+    border-radius: .25em !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+body main .kg-card.kg-header-card .kg-header-card-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    flex: 1 !important;
+}
+
+/* Force content to span full width on non-split cards (including background image cards) */
+body main .kg-card.kg-header-card:not(.kg-layout-split) .kg-header-card-content {
+    grid-column: 1 / -1 !important;
+}
+
+/* ---- Background Image Cards (direct <picture> child) ---- */
+/* Ghost handles these naturally, just ensure the image fills the background and text sits above */
+body main .kg-card.kg-header-card>picture {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 0 !important;
+}
+
+body main .kg-card.kg-header-card>picture>img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+body main .kg-card.kg-header-card:has(> picture) .kg-header-card-content {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* ---- Split-image cards (kg-layout-split) ---- */
+
+/* Desktop: Use grid layout */
+body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    align-items: stretch !important;
+}
+
+/* Desktop Swapped: Picture is normally on the left in DOM, move it to the right */
+body main .kg-card.kg-header-card.kg-layout-split.kg-swapped .kg-header-card-content>picture {
+    order: 2 !important;
+}
+
+/* Picture wrapper: acts as a grid cell, enforce 16:9 minimum */
+body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content>picture {
+    position: relative !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+/* 16:9 aspect ratio minimum */
+body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content>picture::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%;
+}
+
+/* The actual <img> inside the split layout fills the grid cell completely */
+body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content>picture>img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Text wrapper styling */
+body main .kg-card.kg-header-card .kg-header-card-text {
+    padding: clamp(2.4rem, 5vw, 5rem) !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+/* Text on split cards spans its full grid cell */
+body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-text {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* On full-width text cards (no split), allow text to span 100% */
+body main .kg-card.kg-header-card:not(.kg-layout-split) .kg-header-card-text {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Mobile Stacking for Split Layouts */
+@media (max-width: 768px) {
+
+    /* Stack into a single column */
+    body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Standard mobile layout: Image on top, text on bottom */
+    body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-content>picture {
+        order: 1 !important;
+    }
+
+    body main .kg-card.kg-header-card.kg-layout-split .kg-header-card-text {
+        order: 2 !important;
+    }
+
+    /* Swapped mobile layout: Text on top, image on bottom */
+    body main .kg-card.kg-header-card.kg-layout-split.kg-swapped .kg-header-card-content>picture {
+        order: 2 !important;
+    }
+
+    body main .kg-card.kg-header-card.kg-layout-split.kg-swapped .kg-header-card-text {
+        order: 1 !important;
+    }
+}
+
+/* Button sizing */
+body main .kg-card.kg-header-card .kg-header-card-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 48px !important;
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+    font-size: 1.8rem !important;
+    letter-spacing: -0.005em !important;
+    line-height: 48px !important;
+}
+
+body main .kg-card.kg-header-card .kg-header-card-heading {
+    font-size: 2.25em !important;
+    letter-spacing: -0.03em !important;
+    font-weight: 700 !important;
+    margin-top: 0 !important;
+}
+
+body main .kg-card.kg-header-card .kg-header-card-subheading {
+    font-size: var(--content-font-size) !important;
+    font-weight: normal !important;
+    line-height: 1.6 !important;
+    margin-top: calc(0.8em * var(--content-spacing-multiplier, 1)) !important;
+}
+
+body main .kg-card.kg-header-card:has(+ .kg-header-card) {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+body main .kg-card.kg-header-card+.kg-card.kg-header-card {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 
 .gh-article img:not(.kg-header-card-image):not(.gh-author-image):not(.gh-author-icon) {
@@ -1355,4 +1606,44 @@ html.is-dark-mode .icon-sun {
 .navigation-icon .icon {
     width: 30px;
     height: 30px;
+}
+
+/* Nav Page Buttons
+/* ---------------------------------------------------------- */
+
+.tag-hash-nav-page .gh-content .kg-button-card+.kg-button-card {
+    margin-top: 0 !important;
+}
+
+.tag-hash-nav-page .gh-content .kg-button-card .kg-btn {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    background-color: transparent !important;
+    border: 1px solid var(--color-border) !important;
+    color: var(--color-primary-text) !important;
+    text-align: left !important;
+    border-radius: .25em;
+    padding: 32px 24px !important;
+    font-family: var(--gh-font-body, var(--font-sans)) !important;
+}
+
+.tag-hash-nav-page .gh-content .kg-button-card .kg-btn:hover {
+    background-color: var(--color-lighter-gray) !important;
+}
+
+.tag-hash-nav-page .gh-content .kg-button-card .kg-btn svg {
+    margin-right: -6px !important;
+}
+
+.tag-hash-nav-page .gh-content .kg-button-card:has(+ .kg-button-card) .kg-btn {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.tag-hash-nav-page .gh-content .kg-button-card+.kg-button-card .kg-btn {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-top: none !important;
 }

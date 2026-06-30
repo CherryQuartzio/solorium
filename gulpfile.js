@@ -50,8 +50,8 @@ function css(done) {
             autoprefixer(),
             cssnano()
         ]),
-        dest('assets/built/', {sourcemaps: '.'}),
-        livereload()
+        dest('assets/built/', {sourcemaps: '.'})
+        // livereload()
     ], handleError(done));
 }
 
