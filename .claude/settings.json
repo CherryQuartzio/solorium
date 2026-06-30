@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:solo.ghost.io)",
+      "WebSearch",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python3 -c \"import sys,json; [print\\(x['name']\\) for x in json.load\\(sys.stdin\\)]\")",
+      "Bash(curl -s \"https://cdn.jsdelivr.net/ghost/portal@latest/umd/main.css\" -o portal-main.css)",
+      "Bash(grep -oE \"@media \\\\\\(prefers-color-scheme: dark\\\\\\)|\\\\.gh-portal-popup-container[^{ ,]*|font-family:[^;}]*\" portal-main.css)",
+      "Bash(curl -s \"https://data.jsdelivr.com/v1/packages/gh/TryGhost/Ghost@latest/flat\")",
+      "Bash(node_modules/.bin/gulp js *)",
+      "Read(//home/cherryquartzio/Repositories/solorium-agent/**)",
+      "Read(//home/cherryquartzio/Repositories/**)"
+    ]
+  }
+}

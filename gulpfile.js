@@ -68,6 +68,7 @@ function getJsFiles(version) {
     jsFiles.push(src('assets/js/main.js'));
     jsFiles.push(src('assets/js/toc.js'));
     jsFiles.push(src('assets/js/search.js'));
+    jsFiles.push(src('assets/js/iframe-theme.js'));
 
     return jsFiles;
 }
