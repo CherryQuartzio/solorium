@@ -1,0 +1,303 @@
+/* AI Assistant chat page (/ask, page-ask.hbs)
+/* ---------------------------------------------------------- */
+/* All rules scoped to .ai-chat-page so nothing leaks to other pages. */
+
+/* Lock the page: only the bubble list scrolls.
+   NOTE: the :has() selector is kept on its OWN rule. If it shared a rule with
+   the body selector, engines without :has() support would drop the whole rule
+   (and with it the body scroll-lock). Separated, the body rule always applies. */
+body.ai-chat-page {
+    /* position:fixed removes the body from the scroll flow entirely. iOS Safari
+       ignores overflow:hidden when it auto-scrolls a focused input into view on
+       keyboard open, which scrolled the chat up off-screen into the empty space
+       below; a fixed body has nothing to scroll. Combined with --app-height
+       (which keeps the input inside the visual viewport), Safari has no reason
+       to scroll at all. */
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    overflow: hidden;
+    /* The shared theme sets body/​.gh-site min-height:100vh. On mobile 100vh is
+       the LARGE viewport (taller than the visible area), which forces the layout
+       past the bottom of the screen and pushes the composer out of view. Reset
+       it so our svh/--app-height height controls the size. */
+    min-height: 0;
+}
+
+html:has(body.ai-chat-page) {
+    overflow: hidden;
+}
+
+.ai-chat-page .gh-site {
+    /* Fixed + visual-viewport tracking. On iOS Safari the visual viewport pans
+       DOWN when the keyboard opens (visualViewport.offsetTop > 0) while fixed
+       content stays pinned to the layout-viewport top — so the chat slid up out
+       of view. JS translates this by offsetTop (see setAppHeight) to keep it
+       overlaying the visible area. */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    /* Height chain: ultimate vh fallback -> svh (smallest viewport, so the
+       layout always fits within the visible area) -> a JS-measured exact height
+       (--app-height) from visualViewport, which tracks the URL bar AND the
+       on-screen keyboard. 100dvh is intentionally avoided: it GROWS when the
+       toolbar collapses after load, pushing the composer out of an
+       overflow:hidden viewport (it flashes in, then vanishes). */
+    height: 100vh;
+    height: var(--app-height, 100svh);
+    will-change: transform;
+}
+
+/* Keep the header at its normal height; don't let flex shrink it as the
+   conversation grows. */
+.ai-chat-page .gh-head {
+    flex: 0 0 auto;
+}
+
+/* Header stays; footer is removed on this page. */
+.ai-chat-page .gh-foot {
+    display: none;
+}
+
+/* Main fills the space between header and the bottom of the screen.
+   Full width (override .gh-outer padding) so the scroller can reach the edge. */
+.ai-chat-page .ai-chat-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Centered content column. Mirrors the post/page 4 / span 6 widths, going
+   full-width at the 768px breakpoint. Shared by the conversation and composer
+   so their widths line up. */
+.ai-chat-page .ai-chat-col {
+    box-sizing: border-box;
+    /* Match the post/page content column exactly (6 of 12 columns inside the
+       gh-outer gap padding, capped at container-width). The +var(--gap)
+       compensates for this element's own padding-inline, so the *inner* width
+       equals the posts' content width rather than ending up a gap narrower. */
+    width: calc(50% + var(--gap));
+    max-width: calc(var(--container-width, 1440px) / 2 + 2 * var(--gap));
+    margin-inline: auto;
+    padding-inline: var(--gap);
+}
+
+@media (max-width: 991px) {
+    .ai-chat-page .ai-chat-col {
+        width: calc(66.6667% + 0.6667 * var(--gap));
+        max-width: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .ai-chat-page .ai-chat-col {
+        width: 100%;
+    }
+}
+
+/* Scrolling conversation area (full width -> scrollbar at the screen edge)
+/* ---------------------------------------------------------- */
+.ai-chat-page .ai-chat-scroll {
+    --ai-chat-fade: 3rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* Padding matches the fade height so the first/last bubble can scroll
+       fully into the clear region rather than staying dimmed. */
+    padding: var(--ai-chat-fade) 0;
+    scrollbar-width: thin;
+    /* Seamless transitional fade at both edges: into the header at the top,
+       toward the composer at the bottom. */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--ai-chat-fade),
+        #000 calc(100% - var(--ai-chat-fade)),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--ai-chat-fade),
+        #000 calc(100% - var(--ai-chat-fade)),
+        transparent 100%
+    );
+}
+
+/* The centered column inside the scroller grows to fill the viewport so the
+   empty-state welcome can center and messages can hug the composer. */
+.ai-chat-page .ai-chat-scroll > .ai-chat-col {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ai-chat-page.has-messages .ai-chat-scroll > .ai-chat-col {
+    justify-content: flex-end;
+}
+
+/* Empty-state welcome, vertically + horizontally centered. */
+.ai-chat-page .ai-chat-welcome {
+    margin: auto;
+    text-align: center;
+    padding: 1rem;
+}
+
+.ai-chat-page .ai-chat-greeting {
+    font-family: var(--font-sans);
+    font-size: clamp(2.4rem, 1.6rem + 2vw, 3.4rem);
+    font-weight: 600;
+    margin: 0 0 0.6rem;
+    color: var(--color-primary-text);
+}
+
+.ai-chat-page .ai-chat-disclaimer {
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    color: var(--color-secondary-text);
+    margin: 0;
+}
+
+/* Hide the welcome once the conversation has started. */
+.ai-chat-page.has-messages .ai-chat-welcome {
+    display: none;
+}
+
+/* Message bubbles
+/* ---------------------------------------------------------- */
+.ai-chat-page .ai-chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.ai-chat-page .ai-chat-bubble {
+    max-width: 85%;
+    padding: 1rem 1.6rem;
+    border-radius: 1.4rem;
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    /* Smoothly recolor with the theme, like the site background. */
+    transition: background-color var(--transition-duration) ease,
+                color var(--transition-duration) ease;
+}
+
+.ai-chat-page .ai-chat-bubble.is-user {
+    align-self: flex-end;
+    background-color: var(--ghost-accent-color);
+    color: #fff;
+    border-bottom-right-radius: 0.4rem;
+}
+
+.ai-chat-page .ai-chat-bubble.is-agent {
+    align-self: flex-start;
+    background-color: var(--color-utility-gray);
+    color: var(--color-primary-text);
+    border-bottom-left-radius: 0.4rem;
+}
+
+/* Typing indicator (shown while awaiting a reply). */
+.ai-chat-page .ai-chat-bubble.is-typing {
+    color: var(--color-secondary-text);
+    font-style: italic;
+}
+
+/* Composer
+/* ---------------------------------------------------------- */
+.ai-chat-page .ai-chat-form {
+    flex: 0 0 auto;
+    /* 3rem gap from the bottom, plus any device safe-area inset. */
+    margin-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* When the on-screen keyboard is up, sit close to it instead of leaving the
+   full 3rem gap (which looks oversized above the keyboard). */
+.ai-chat-page.kb-open .ai-chat-form {
+    margin-bottom: 0.8rem;
+}
+
+/* Rounded rectangle with the same outline as the share button. */
+.ai-chat-page .ai-chat-input-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1.6rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.6rem;
+    background-color: var(--background-color);
+    /* Transition border + background with the theme, matching the site bg. */
+    transition: background-color var(--transition-duration) ease,
+                border-color var(--transition-duration) ease;
+}
+
+.ai-chat-page .ai-chat-input-wrap:focus-within {
+    border-color: var(--ghost-accent-color);
+}
+
+/* Single line to start; grows upward as content wraps (height set in JS). */
+.ai-chat-page .ai-chat-input {
+    flex: 1 1 auto;
+    border: 0;
+    outline: 0;
+    resize: none;
+    background: transparent;
+    color: var(--color-primary-text);
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    line-height: 1.5;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+}
+
+.ai-chat-page .ai-chat-input::placeholder {
+    color: var(--color-secondary-text);
+}
+
+/* Accent send button, anchored bottom-right. */
+.ai-chat-page .ai-chat-send {
+    flex: 0 0 auto;
+    width: 3.6rem;
+    height: 3.6rem;
+    border: 0;
+    /* Rounded square, concentric with the textbox's inner corner
+       (1.6rem outer radius − 0.6rem padding ≈ 1rem). */
+    border-radius: 1rem;
+    background-color: var(--ghost-accent-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.ai-chat-page .ai-chat-send:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.ai-chat-page .ai-chat-send:not(:disabled):active {
+    transform: scale(0.94);
+}
+
+.ai-chat-page .ai-chat-send .icon {
+    width: 2rem;
+    height: 2rem;
+}

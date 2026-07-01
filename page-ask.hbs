@@ -1,0 +1,40 @@
+{{!< default}}
+{{!-- Auto-bound template for the page with slug "ask" (path /ask). --}}
+
+{{#contentFor "body_class"}} ai-chat-page{{/contentFor}}
+
+<main class="gh-main gh-outer ai-chat-main">
+
+    {{!-- Full-width scroller so its scrollbar sits at the screen's right edge;
+          inner column keeps the conversation centered at the content width. --}}
+    <div class="ai-chat-scroll" id="ai-chat-scroll">
+        <div class="ai-chat-col">
+            <div class="ai-chat-welcome" id="ai-chat-welcome">
+                <p class="ai-chat-greeting" id="ai-chat-greeting">Hi, how can I help?</p>
+                <p class="ai-chat-disclaimer">AI can make mistakes. Double-check important info.</p>
+            </div>
+            <div class="ai-chat-messages" id="ai-chat-messages" aria-live="polite"></div>
+        </div>
+    </div>
+
+    {{!-- Set the agent endpoint here, or override site-wide via Ghost code
+          injection: <script>window.SOLORIUM_AGENT_URL = "https://…/chat"</script> --}}
+    <form class="ai-chat-form" id="ai-chat-form" data-endpoint="https://agent.quangmn.com/chat">
+        <div class="ai-chat-col">
+            <div class="ai-chat-input-wrap">
+                <textarea
+                    class="ai-chat-input"
+                    id="ai-chat-input"
+                    rows="1"
+                    placeholder="Ask about {{@site.title}}…"
+                    aria-label="Ask the assistant a question"
+                    autocomplete="off"
+                ></textarea>
+                <button type="submit" class="ai-chat-send" id="ai-chat-send" aria-label="Send message" disabled>
+                    {{> "icons/arrow-up"}}
+                </button>
+            </div>
+        </div>
+    </form>
+
+</main>

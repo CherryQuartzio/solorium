@@ -11,7 +11,28 @@
       "Bash(curl -s \"https://data.jsdelivr.com/v1/packages/gh/TryGhost/Ghost@latest/flat\")",
       "Bash(node_modules/.bin/gulp js *)",
       "Read(//home/cherryquartzio/Repositories/solorium-agent/**)",
-      "Read(//home/cherryquartzio/Repositories/**)"
+      "Read(//home/cherryquartzio/Repositories/**)",
+      "Bash(python3 -m py_compile app/*.py app/*/*.py tests/*.py)",
+      "Bash(npx gscan *)",
+      "Bash(unzip -l dist/solorium.zip)",
+      "Bash(node -e \"new Function\\(require\\('fs'\\).readFileSync\\('assets/js/chat.js','utf8'\\)\\); console.log\\('chat.js parses OK'\\)\")",
+      "Bash(grep -oE '\\\\.gh-canvas[^{,]*\\\\{[^}]*\\\\}' assets/built/screen.css)",
+      "Read(//home/cherryquartzio/Repositories/solorium-agent/app/**)",
+      "Read(//home/cherryquartzio/Repositories/solorium-agent/app/core/**)",
+      "Read(//home/cherryquartzio/Repositories/solorium-agent/app/content/**)",
+      "Read(//home/cherryquartzio/Repositories/solorium-agent/app/api/**)",
+      "Bash(.venv/bin/python -m py_compile app/*.py app/*/*.py tests/*.py)",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(.venv/bin/python -c \"import app.main; print\\('APP IMPORTS OK'\\)\")",
+      "Bash(CHROMA_DIR=./.chroma .venv/bin/python -m pytest -q)",
+      "Bash(.venv/bin/python /tmp/claude-1000/-home-cherryquartzio-Repositories-Solo/72d4a1ff-329e-4fc3-9ff3-2bd667f50f60/scratchpad/rag_check.py)",
+      "Bash(.venv/bin/python /tmp/claude-1000/-home-cherryquartzio-Repositories-Solo/72d4a1ff-329e-4fc3-9ff3-2bd667f50f60/scratchpad/review_probe.py)",
+      "Bash(.venv/bin/python -m py_compile app/*.py app/*/*.py)"
+    ],
+    "additionalDirectories": [
+      "/home/cherryquartzio/Repositories/solorium-agent",
+      "/home/cherryquartzio/Repositories/solorium-agent/app",
+      "/home/cherryquartzio/Repositories/solorium-agent/app/content"
     ]
   }
 }
