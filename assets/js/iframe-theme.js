@@ -139,7 +139,9 @@
             'body, button, button span, input, textarea,',
             'h1, h2, h3, h4, h5, h6, .gh-portal-btn, .gh-portal-btn-text {',
             '  font-family: ' + fontStack() + ' !important;',
-            '}'
+            '}',
+            'input, textarea { border-radius: 0.6rem !important; }',
+            '.gh-portal-btn { border-radius: 0.6rem !important; }'
         ].join('\n');
         if (!dark) {
             return font;

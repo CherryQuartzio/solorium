@@ -353,7 +353,7 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
 }
 
 .has-side-about .gh-about-image {
-    border-radius: .25em;
+    border-radius: 0.8rem;
 }
 
 @media (max-width: 840px) {
@@ -617,7 +617,7 @@ body.page-template.no-toc .no-image .gh-article-header :is(.gh-article-title, .g
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: .25em;
+    border-radius: .8rem;
 }
 
 .has-classic-feed .gh-card-wrapper {
@@ -1394,7 +1394,7 @@ html.is-dark-mode .icon-moon {
 
 /* Overhaul for kg-header-card to fix Ghost's default grids, padding, and min-heights */
 body main .kg-card.kg-header-card {
-    border-radius: .25em !important;
+    border-radius: .8rem !important;
     overflow: hidden !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -1530,6 +1530,7 @@ body main .kg-card.kg-header-card:not(.kg-layout-split) .kg-header-card-text {
 
 /* Button sizing */
 body main .kg-card.kg-header-card .kg-header-card-button {
+    border-radius: 0.6rem !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1566,7 +1567,7 @@ body main .kg-card.kg-header-card+.kg-card.kg-header-card {
 }
 
 .gh-article img:not(.kg-header-card-image):not(.gh-author-image):not(.gh-author-icon) {
-    border-radius: .25em;
+    border-radius: .8rem;
 }
 
 /* Share button
@@ -1642,7 +1643,7 @@ body main .kg-card.kg-header-card+.kg-card.kg-header-card {
     border: 1px solid var(--color-border) !important;
     color: var(--color-primary-text) !important;
     text-align: left !important;
-    border-radius: .25em;
+    border-radius: 0.8rem;
     padding: 28px 20px !important;
     font-family: var(--gh-font-body, var(--font-sans)) !important;
 }
@@ -1716,4 +1717,33 @@ body main .kg-card.kg-header-card+.kg-card.kg-header-card {
 
 .is-light-bg.is-head-transparent .gh-icon-tooltip {
     color: rgba(0, 0, 0, 0.7);
+}
+
+/* Global Buttons Override */
+.gh-btn,
+.kg-btn,
+.kg-header-card-button,
+.gh-button-share,
+button {
+    font-family: var(--gh-font-body, var(--font-sans)) !important;
+    border-radius: 0.6rem !important;
+}
+
+/* Maintain specific radius for nav page buttons */
+.tag-hash-nav-page .gh-content .kg-button-card .kg-btn {
+    border-radius: 0.8rem !important;
+}
+
+/* Maintain specific radius for AI chat buttons */
+.ai-chat-page .ai-chat-send {
+    border-radius: 1rem !important;
+}
+
+/* Card border radii */
+.kg-bookmark-card,
+.kg-bookmark-container,
+.kg-callout-card,
+.kg-cta-card,
+.gh-cta {
+    border-radius: 0.8rem !important;
 }
